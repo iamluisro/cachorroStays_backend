@@ -1,13 +1,15 @@
 const express = require('express');
-const { mockHotels } = require('../utils/mocks/mockHotels');
+const HotelsService = require('../services/hotels');
 
 function hotelsApi(app) {
   const router = express.Router();
   app.use('/api/hotels', router);
 
+  const hotelsService = new HotelsService();
+
   router.get('/', async function(req, res, next) {
     try {
-      const hotels = await Promise.resolve(mockHotels);
+      const hotels = await hotelsService.getHotels();
       res.status(200).json({
         data: hotels,
         message: 'hotels listed'
@@ -18,8 +20,10 @@ function hotelsApi(app) {
   });
 
   router.get('/:hotelId', async function(req, res, next) {
+    const { hotelId } = req.params;
+
     try {
-      const hotel = await Promise.resolve(mockHotels[0]);
+      const hotel = await hotelsService.getHotel({ hotelId });
       res.status(200).json({
         data: hotel,
         message: 'hotel retrieved'
@@ -30,8 +34,9 @@ function hotelsApi(app) {
   });
 
   router.post('/', async function(req, res, next) {
+    const { body: hotel } = req;
     try {
-      const createHotelId = await Promise.resolve(mockHotels[0].id);
+      const createHotelId = await hotelsService.createHotel({ hotel });
       res.status(200).json({
         data: createHotelId,
         message: 'hotels created'
@@ -42,8 +47,14 @@ function hotelsApi(app) {
   });
 
   router.put('/:hotelId', async function(req, res, next) {
+    const { hotelId } = req.params;
+    const { body: hotel } = req;
+
     try {
-      const updateHotelsId = await Promise.resolve(mockHotels[0].id);
+      const updateHotelsId = await hotelsService.updateHotel({
+        hotelId,
+        hotel
+      });
       res.status(200).json({
         data: updateHotelsId,
         message: 'hotel updated'
@@ -54,8 +65,9 @@ function hotelsApi(app) {
   });
 
   router.delete('/:hotelId', async function(req, res, next) {
+    const { hotelId } = req.params;
     try {
-      const deleteHotelsId = await Promise.resolve(mockHotels[0].id);
+      const deleteHotelsId = await hotelsService.updateHotel({ hotelId });
       res.status(200).json({
         data: deleteHotelsId,
         message: 'hotel deleted'
