@@ -2,14 +2,9 @@ const express = require('express');
 const app = express();
 
 const { config } = require('./config/index');
+const hotelsApi = require('./routes/hotels.js');
 
-app.get('/', function(req, res) {
-  res.send('hello world');
-});
-
-app.get('/json', function(req, res) {
-  res.json({ hello: 'world' });
-});
+hotelsApi(app);
 
 app.listen(config.port, function() {
   console.log(`listening http://localhost:${config.port}`);
