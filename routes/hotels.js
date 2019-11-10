@@ -67,9 +67,9 @@ function hotelsApi(app) {
   router.delete('/:hotelId', async function(req, res, next) {
     const { hotelId } = req.params;
     try {
-      const deleteHotelsId = await hotelsService.updateHotel({ hotelId });
+      const deleteHotelId = await hotelsService.deleteHotel({ hotelId });
       res.status(200).json({
-        data: deleteHotelsId,
+        data: deleteHotelId,
         message: 'hotel deleted'
       });
     } catch (err) {
