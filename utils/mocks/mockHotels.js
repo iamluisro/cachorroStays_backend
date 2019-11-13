@@ -29,6 +29,17 @@ const mockHotels = [
   }
 ];
 
+class HotelsServiceMock {
+  async getHotels() {
+    return Promise.resolve(mockHotels);
+  }
+
+  async createHotel() {
+    return Promise.resolve(mockHotels[0]);
+  }
+}
+
 module.exports = {
-  mockHotels
+  mockHotels,
+  HotelsServiceMock
 };
