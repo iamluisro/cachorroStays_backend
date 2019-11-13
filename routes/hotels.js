@@ -1,5 +1,12 @@
 const express = require('express');
 const HotelsService = require('../services/hotels');
+const {
+  hotelIdSchema,
+  createHotelSchema,
+  updateHotelSchema
+} = require('../utils/schemas/hotels');
+
+const validationHandler = require('../utils/middleware/validationHandler');
 
 function hotelsApi(app) {
   const router = express.Router();
@@ -19,21 +26,29 @@ function hotelsApi(app) {
     }
   });
 
-  router.get('/:hotelId', async function(req, res, next) {
-    const { hotelId } = req.params;
+  router.get(
+    '/:hotelId',
+    validationHandler({ hotelId: hotelIdSchema }, 'params'),
+    async function(req, res, next) {
+      const { hotelId } = req.params;
 
-    try {
-      const hotel = await hotelsService.getHotel({ hotelId });
-      res.status(200).json({
-        data: hotel,
-        message: 'hotel retrieved'
-      });
-    } catch (err) {
-      next(err);
+      try {
+        const hotel = await hotelsService.getHotel({ hotelId });
+        res.status(200).json({
+          data: hotel,
+          message: 'hotel retrieved'
+        });
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
-  router.post('/', async function(req, res, next) {
+  router.post('/', validationHandler(createHotelSchema), async function(
+    req,
+    res,
+    next
+  ) {
     const { body: hotel } = req;
     try {
       const createHotelId = await hotelsService.createHotel({ hotel });
@@ -46,36 +61,45 @@ function hotelsApi(app) {
     }
   });
 
-  router.put('/:hotelId', async function(req, res, next) {
-    const { hotelId } = req.params;
-    const { body: hotel } = req;
+  router.put(
+    '/:hotelId',
+    validationHandler({ hotelId: hotelIdSchema }, 'params'),
+    validationHandler({ updateHotelSchema }),
+    async function(req, res, next) {
+      const { hotelId } = req.params;
+      const { body: hotel } = req;
 
-    try {
-      const updateHotelsId = await hotelsService.updateHotel({
-        hotelId,
-        hotel
-      });
-      res.status(200).json({
-        data: updateHotelsId,
-        message: 'hotel updated'
-      });
-    } catch (err) {
-      next(err);
+      try {
+        const updateHotelsId = await hotelsService.updateHotel({
+          hotelId,
+          hotel
+        });
+        res.status(200).json({
+          data: updateHotelsId,
+          message: 'hotel updated'
+        });
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
-  router.delete('/:hotelId', async function(req, res, next) {
-    const { hotelId } = req.params;
-    try {
-      const deleteHotelId = await hotelsService.deleteHotel({ hotelId });
-      res.status(200).json({
-        data: deleteHotelId,
-        message: 'hotel deleted'
-      });
-    } catch (err) {
-      next(err);
+  router.delete(
+    '/:hotelId',
+    validationHandler({ hotelId: hotelIdSchema }, 'params'),
+    async function(req, res, next) {
+      const { hotelId } = req.params;
+      try {
+        const deleteHotelId = await hotelsService.deleteHotel({ hotelId });
+        res.status(200).json({
+          data: deleteHotelId,
+          message: 'hotel deleted'
+        });
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 }
 
 module.exports = hotelsApi;
