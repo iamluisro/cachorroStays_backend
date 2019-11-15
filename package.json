@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "DEBUG=app:* nodemon index",
+    "start": "NODE_ENV=production node index",
     "test": "mocha --exit"
   },
   "repository": {
