@@ -3,6 +3,7 @@ const app = express();
 
 const { config } = require('./config/index');
 const hotelsApi = require('./routes/hotels.js');
+const userHotelsApi = require('./routes/userHotels');
 
 const {
   logErrors,
@@ -17,6 +18,7 @@ app.use(express.json());
 
 //Routes
 hotelsApi(app);
+userHotelsApi(app);
 
 //Catch 404 error
 app.use(notFoundHandler);

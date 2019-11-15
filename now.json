@@ -1,12 +1,13 @@
 {
   "name": "cachorroStays",
   "version": 2,
+  "public": true,
   "builds": [{ "src": "index.js", "use": "@now/node" }],
   "routes": [{ "src": "/(.*)", "dest": "/index.js" }],
   "env": {
-    "DB_USER": "@cachorrostays-db-user-readwrite",
-    "DB_PASSWORD": "@cachorrostays-db-ps-readwrite",
-    "DB_HOST": "@cachorrostays-db-host-readwrite",
-    "DB_NAME": "@cachorrostays-db-name"
+    "DB_USER": "@cs-db-user",
+    "DB_PASSWORD": "@cs-db-ps",
+    "DB_HOST": "@cs-db-host",
+    "DB_NAME": "@cs-db-name"
   }
 }
