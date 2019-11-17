@@ -2,7 +2,10 @@ const express = require('express');
 const app = express();
 
 const { config } = require('./config/index');
+
+const authApi = require('./routes/auth');
 const hotelsApi = require('./routes/hotels.js');
+const userHotelsApi = require('./routes/userHotels');
 
 const {
   logErrors,
@@ -16,7 +19,9 @@ const notFoundHandler = require('./utils/middleware/notFoundHandler.js');
 app.use(express.json());
 
 //Routes
+authApi(app);
 hotelsApi(app);
+userHotelsApi(app);
 
 //Catch 404 error
 app.use(notFoundHandler);
