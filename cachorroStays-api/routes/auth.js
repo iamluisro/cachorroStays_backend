@@ -21,7 +21,31 @@ function authApi(app) {
   const usersService = new UserService();
 
   router.post('/sign-in', async function(req, res, next) {
-    const { apiKeyToken } = req.body;
+    passport.authenticate('basic', function(error, data) {
+      try {
+        if (error || !data) {
+          next(boom.unauthorized());
+        }
+
+        req.login(data, { session: false }, async function(error) {
+          if (error) {
+            next(error);
+          }
+          const { token, ...user } = data;
+
+          res.cookie('token', token, {
+            httpOnly: !config.dev,
+            secure: !config.dev
+          });
+
+          res.status(200).json(user);
+        });
+      } catch (error) {
+        next(error);
+      }
+    })(req, res, next);
+
+    /* const { apiKeyToken } = req.body;
     if (!apiKeyToken) {
       next(boom.unauthorized('apiKeyToken is required'));
     }
@@ -63,7 +87,7 @@ function authApi(app) {
       } catch (err) {
         next(err);
       }
-    })(req, res, next);
+    })(req, res, next); */
   });
 
   router.post('/sign-up', validationHandler(createUserSchema), async function(
